@@ -1,0 +1,75 @@
+/* ══ i18n ══ */
+const I18N={
+  ko:{
+    navTodo:'오늘 할 일',navAI:'AI 리포트',navHistory:'히스토리',navSettings:'설정',navRoutine:'데일리 루틴',
+    secTodo:'오늘 할 일',secAI:'AI 일일 리포트',secHistory:'히스토리',secSettings:'설정',secRoutine:'데일리 루틴',
+    btnNew:'새 할 일',btnCancel:'취소',btnConnect:'저장 후 연결',btnToday:'오늘',
+    btnGenReport:'AI 리포트 생성',btnCopy:'📋 복사',btnDownload:'⬇ 다운로드',
+    btnExport:'JSON 내보내기',btnClear:'로컬 초기화',btnNewRoutine:'루틴 추가',btnApplyToday:'오늘 할 일에 적용',
+    fieldTask:'업무 내용',fieldPriority:'우선순위',fieldDue:'마감일',fieldMemo:'메모',fieldRoutineName:'루틴 이름',fieldDays:'반복 요일',fieldStatus:'진행 상태',
+    taskPh:'무엇을 해야 하나요?',quickPh:'빠른 추가 (Enter) 또는 +',memoPh:'추가 메모...',routineNamePh:'매일 할 일을 입력하세요',
+    priHigh:'높음',priMed:'보통',priLow:'낮음',
+    statusTodo:'할 일',statusInProgress:'진행중',statusReview:'검토중',statusDone:'완료',
+    tabAll:'전체',tabHigh:'높음',tabMed:'보통',tabLow:'낮음',
+    tabTodo:'TODO',tabAI:'AI REPORT',tabHistory:'HISTORY',tabSettings:'SETTINGS',tabRoutine:'ROUTINE',
+    checking:'확인 중...',connected:'✓ 연결됨',disconnected:'× 미연결',
+    aiEmpty:'리포트 생성 버튼을 누르면\n오늘 업무를 분석해드립니다',
+    aiLoading:'AI가 분석 중입니다...',aiError:'오류. 다시 시도해주세요.',
+    customColor:'커스텀',dataManage:'데이터 관리',
+    progLabel:'완료',doneBadge:'완료',
+    overdue:'기한 초과',todayDue:'오늘 마감',tomorrowDue:'내일 마감',
+    emptyTodo:'+ 버튼으로 첫 할 일을 추가해보세요',
+    emptyFilter:'해당 우선순위의 항목이 없습니다',
+    emptyHistory:'이 기간의 기록이 없습니다',
+    emptyRoutine:'루틴을 추가해보세요',
+    copied:'복사됐습니다',saved:'저장됐습니다',deleted:'삭제됐습니다',
+    allDone:'오늘 할 일을 모두 완료했어요! 🎉',
+    confirmClear:'로컬 데이터를 모두 삭제할까요?',configSaved:'연결 설정 저장됨',btnSync:'☁️ 지금 동기화',
+    modalAdd:'할 일 추가',modalEdit:'할 일 수정',btnAdd:'추가',btnSave:'저장',
+    rmodalAdd:'루틴 추가',rmodalEdit:'루틴 수정',
+    routineApplied:'개 루틴이 오늘 할 일에 추가됐습니다',routineAlready:'오늘 루틴이 이미 적용되어 있습니다',
+    todayRoutine:'오늘 적용',daysLabel:'요일',
+    weekdaysOnly:'월요일 ~ 금요일 자동 반복',
+  },
+  en:{
+    navTodo:'Today',navAI:'AI Report',navHistory:'History',navSettings:'Settings',navRoutine:'Daily Routine',
+    secTodo:"Today's Tasks",secAI:'Daily AI Report',secHistory:'History',secSettings:'Settings',secRoutine:'Daily Routine',
+    btnNew:'New Task',btnCancel:'Cancel',btnConnect:'Save & Connect',btnToday:'Today',
+    btnGenReport:'Generate Report',btnCopy:'📋 Copy',btnDownload:'⬇ Download',
+    btnExport:'Export JSON',btnClear:'Clear Data',btnNewRoutine:'Add Routine',btnApplyToday:'Apply to Today',
+    fieldTask:'Task',fieldPriority:'Priority',fieldDue:'Due Date',fieldMemo:'Notes',fieldRoutineName:'Routine Name',fieldDays:'Repeat Days',fieldStatus:'Status',
+    taskPh:"What needs to be done?",quickPh:'Quick add (Enter) or +',memoPh:'Additional notes...',routineNamePh:'Enter a daily task...',
+    priHigh:'High',priMed:'Med',priLow:'Low',
+    statusTodo:'To Do',statusInProgress:'In Progress',statusReview:'In Review',statusDone:'Done',
+    tabAll:'All',tabHigh:'High',tabMed:'Med',tabLow:'Low',
+    tabTodo:'TODO',tabAI:'AI REPORT',tabHistory:'HISTORY',tabSettings:'SETTINGS',tabRoutine:'ROUTINE',
+    checking:'Checking...',connected:'✓ Connected',disconnected:'× Disconnected',
+    aiEmpty:'Press Generate to analyze\nyour work for today',
+    aiLoading:'AI is analyzing...',aiError:'Error. Try again.',
+    customColor:'Custom',dataManage:'Data Management',
+    progLabel:'done',doneBadge:'Done',
+    overdue:'Overdue',todayDue:'Due today',tomorrowDue:'Due tomorrow',
+    emptyTodo:'Add your first task with +',
+    emptyFilter:'No tasks at this priority',
+    emptyHistory:'No records for this period',
+    emptyRoutine:'Add your first routine',
+    copied:'Copied!',saved:'Saved',deleted:'Deleted',
+    allDone:'All tasks completed! 🎉',
+    confirmClear:'Delete all local data?',configSaved:'Connection settings saved',btnSync:'☁️ Sync now',
+    modalAdd:'Add Task',modalEdit:'Edit Task',btnAdd:'Add',btnSave:'Save',
+    rmodalAdd:'Add Routine',rmodalEdit:'Edit Routine',
+    routineApplied:' routines added to today',routineAlready:"Today's routines already applied",
+    todayRoutine:'Today',daysLabel:'days',
+    weekdaysOnly:'Repeats Monday – Friday automatically',
+  }
+};
+let lang=localStorage.getItem('wl_lang')||'ko';
+const t=k=>I18N[lang][k]||I18N.ko[k]||k;
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML=t(el.getAttribute('data-i18n')).replace(/\n/g,'<br>'); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
+  document.getElementById('btn-lang').textContent=lang==='ko'?'EN':'KO';
+  document.documentElement.lang=lang;
+  renderFilterTabs(); renderTodos();
+}
+function toggleLang(){ lang=lang==='ko'?'en':'ko'; localStorage.setItem('wl_lang',lang); applyLang(); }
