@@ -128,7 +128,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-sans);min-hei
 .filter-tab:hover{border-color:var(--border3);color:var(--text2)}
 .filter-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(79,124,255,.1)}
 
-/* ── Modal ── */
+/* ── Status badges ── */
+.status-btn{font-size:11px;font-family:var(--font-mono);padding:3px 10px;border-radius:999px;border:1px solid var(--border2);background:transparent;cursor:pointer;transition:all .15s;white-space:nowrap}
+.status-btn:hover{opacity:.8}
+.status-todo{border-color:var(--border2);color:var(--text3);background:var(--bg4)}
+.status-inprogress{border-color:#6080ff;color:#6080ff;background:rgba(96,128,255,.1)}
+.status-review{border-color:var(--amber);color:var(--amber);background:rgba(240,160,32,.1)}
+.status-done{border-color:var(--green);color:var(--green);background:rgba(37,193,122,.1)}
+.task-card.status-inprogress-card::before{background:var(--accent)}
+.task-card.status-review-card::before{background:var(--amber)}
+.task-card.status-done-card::before{background:var(--green)}
+.task-card.status-todo-card::before{background:var(--border3)}
+
+/* ── Date picker bar ── */
+.date-nav{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.date-nav-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:14px;transition:all .13s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.date-nav-btn:hover{background:var(--bg4);color:var(--text)}
+.date-nav-label{flex:1;text-align:center;font-family:var(--font-mono);font-size:12px;color:var(--text);cursor:pointer;padding:5px 8px;border-radius:var(--r);border:1px solid transparent;transition:all .13s}
+.date-nav-label:hover{background:var(--bg3);border-color:var(--border)}
+.date-nav-label.is-today{color:var(--accent)}
+.date-nav-input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;backdrop-filter:blur(4px);align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r3);width:440px;max-width:calc(100vw - 32px);max-height:90vh;overflow-y:auto;animation:modalIn .2s ease;box-shadow:0 20px 60px rgba(0,0,0,.5)}
@@ -353,6 +372,15 @@ textarea.form-input{resize:vertical;min-height:76px;line-height:1.55}
         </div>
       </div>
       <div class="form-field">
+        <label class="form-label" data-i18n="fieldStatus">진행 상태</label>
+        <div class="pri-pills" id="status-pills">
+          <button class="pri-pill" data-s="todo" onclick="selStatus('todo')"><span data-i18n="statusTodo">할 일</span></button>
+          <button class="pri-pill sel-med" data-s="inprogress" onclick="selStatus('inprogress')"><span data-i18n="statusInProgress">진행중</span></button>
+          <button class="pri-pill" data-s="review" onclick="selStatus('review')"><span data-i18n="statusReview">검토중</span></button>
+          <button class="pri-pill" data-s="done" onclick="selStatus('done')"><span data-i18n="statusDone">완료</span></button>
+        </div>
+      </div>
+      <div class="form-field">
         <label class="form-label" data-i18n="fieldDue">마감일</label>
         <input class="form-input" type="date" id="m-due"/>
       </div>
@@ -459,6 +487,13 @@ textarea.form-input{resize:vertical;min-height:76px;line-height:1.55}
     <!-- TODO -->
     <div id="panel-todo" class="panel active">
       <p class="sec-label" data-i18n="secTodo">오늘 할 일</p>
+      <div class="date-nav">
+        <button class="date-nav-btn" onclick="navDate(-1)">‹</button>
+        <span class="date-nav-label" id="date-nav-label" onclick="openDatePicker()"></span>
+        <input type="date" id="date-picker-input" class="date-nav-input" onchange="setActiveDate(this.value)"/>
+        <button class="date-nav-btn" onclick="navDate(1)">›</button>
+        <button class="date-nav-btn" id="today-jump-btn" onclick="jumpToToday()" style="width:auto;padding:0 8px;border-radius:var(--r);font-size:10px;font-family:var(--font-mono)" data-i18n="btnToday">오늘</button>
+      </div>
       <div class="add-bar">
         <input class="quick-input" type="text" id="quick-input" data-i18n-ph="quickPh" placeholder="빠른 추가 (Enter) 또는 +" onkeydown="if(event.key==='Enter')quickAdd()"/>
         <button class="add-btn" onclick="openModal()">
@@ -564,12 +599,13 @@ const I18N={
   ko:{
     navTodo:'오늘 할 일',navAI:'AI 리포트',navHistory:'히스토리',navSettings:'설정',navRoutine:'데일리 루틴',
     secTodo:'오늘 할 일',secAI:'AI 일일 리포트',secHistory:'히스토리',secSettings:'설정',secRoutine:'데일리 루틴',
-    btnNew:'새 할 일',btnCancel:'취소',btnConnect:'저장 후 연결',
+    btnNew:'새 할 일',btnCancel:'취소',btnConnect:'저장 후 연결',btnToday:'오늘',
     btnGenReport:'AI 리포트 생성',btnCopy:'📋 복사',btnDownload:'⬇ 다운로드',
     btnExport:'JSON 내보내기',btnClear:'로컬 초기화',btnNewRoutine:'루틴 추가',btnApplyToday:'오늘 할 일에 적용',
-    fieldTask:'업무 내용',fieldPriority:'우선순위',fieldDue:'마감일',fieldMemo:'메모',fieldRoutineName:'루틴 이름',fieldDays:'반복 요일',
+    fieldTask:'업무 내용',fieldPriority:'우선순위',fieldDue:'마감일',fieldMemo:'메모',fieldRoutineName:'루틴 이름',fieldDays:'반복 요일',fieldStatus:'진행 상태',
     taskPh:'무엇을 해야 하나요?',quickPh:'빠른 추가 (Enter) 또는 +',memoPh:'추가 메모...',routineNamePh:'매일 할 일을 입력하세요',
     priHigh:'높음',priMed:'보통',priLow:'낮음',
+    statusTodo:'할 일',statusInProgress:'진행중',statusReview:'검토중',statusDone:'완료',
     tabAll:'전체',tabHigh:'높음',tabMed:'보통',tabLow:'낮음',
     tabTodo:'TODO',tabAI:'AI REPORT',tabHistory:'HISTORY',tabSettings:'SETTINGS',tabRoutine:'ROUTINE',
     checking:'확인 중...',connected:'✓ 연결됨',disconnected:'× 미연결',
@@ -594,12 +630,13 @@ const I18N={
   en:{
     navTodo:'Today',navAI:'AI Report',navHistory:'History',navSettings:'Settings',navRoutine:'Daily Routine',
     secTodo:"Today's Tasks",secAI:'Daily AI Report',secHistory:'History',secSettings:'Settings',secRoutine:'Daily Routine',
-    btnNew:'New Task',btnCancel:'Cancel',btnConnect:'Save & Connect',
+    btnNew:'New Task',btnCancel:'Cancel',btnConnect:'Save & Connect',btnToday:'Today',
     btnGenReport:'Generate Report',btnCopy:'📋 Copy',btnDownload:'⬇ Download',
     btnExport:'Export JSON',btnClear:'Clear Data',btnNewRoutine:'Add Routine',btnApplyToday:'Apply to Today',
-    fieldTask:'Task',fieldPriority:'Priority',fieldDue:'Due Date',fieldMemo:'Notes',fieldRoutineName:'Routine Name',fieldDays:'Repeat Days',
+    fieldTask:'Task',fieldPriority:'Priority',fieldDue:'Due Date',fieldMemo:'Notes',fieldRoutineName:'Routine Name',fieldDays:'Repeat Days',fieldStatus:'Status',
     taskPh:"What needs to be done?",quickPh:'Quick add (Enter) or +',memoPh:'Additional notes...',routineNamePh:'Enter a daily task...',
     priHigh:'High',priMed:'Med',priLow:'Low',
+    statusTodo:'To Do',statusInProgress:'In Progress',statusReview:'In Review',statusDone:'Done',
     tabAll:'All',tabHigh:'High',tabMed:'Med',tabLow:'Low',
     tabTodo:'TODO',tabAI:'AI REPORT',tabHistory:'HISTORY',tabSettings:'SETTINGS',tabRoutine:'ROUTINE',
     checking:'Checking...',connected:'✓ Connected',disconnected:'× Disconnected',
@@ -709,7 +746,41 @@ const todayStr=()=>new Date().toISOString().slice(0,10);
 function getTodos(date){ return load(KEY_TODOS)[date]||[] }
 function saveTodosLocal(date,list){ const a=load(KEY_TODOS); a[date]=list; ls(KEY_TODOS,a) }
 
-/* ══ Init dates ══ */
+/* ══ Active date (not just today) ══ */
+let activeDate=todayStr();
+
+function getActiveDate(){ return activeDate; }
+
+function updateDateNavLabel(){
+  const el=document.getElementById('date-nav-label'); if(!el) return;
+  const dt=new Date(activeDate+'T00:00:00');
+  const isToday=activeDate===todayStr();
+  const DOW=lang==='ko'?['일','월','화','수','목','금','토']:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const label=lang==='ko'
+    ?`${dt.getMonth()+1}월 ${dt.getDate()}일 (${DOW[dt.getDay()]})`
+    :`${DOW[dt.getDay()]}, ${dt.toLocaleDateString('en-AU',{month:'short',day:'numeric'})}`;
+  el.textContent=isToday?(lang==='ko'?`오늘 · ${label}`:`Today · ${label}`):label;
+  el.className='date-nav-label'+(isToday?' is-today':'');
+  // Show/hide today jump btn
+  const jb=document.getElementById('today-jump-btn'); if(jb) jb.style.display=isToday?'none':'flex';
+}
+
+function navDate(dir){
+  const dt=new Date(activeDate+'T00:00:00'); dt.setDate(dt.getDate()+dir);
+  activeDate=dt.toISOString().slice(0,10);
+  updateDateNavLabel(); renderTodos();
+}
+
+function openDatePicker(){
+  const inp=document.getElementById('date-picker-input');
+  inp.value=activeDate; inp.showPicker?.();
+  inp.style.pointerEvents='auto';
+  inp.click();
+  inp.style.pointerEvents='none';
+}
+
+function setActiveDate(val){ if(!val) return; activeDate=val; updateDateNavLabel(); renderTodos(); }
+function jumpToToday(){ activeDate=todayStr(); updateDateNavLabel(); renderTodos(); }
 function initDates(){
   const now=new Date();
   const sdEl=document.getElementById('sidebar-date');
@@ -801,22 +872,23 @@ function renderFilterTabs(){
 }
 
 /* ══ Modal ══ */
-let editIdx=null, selPriVal='high';
+let editIdx=null, selPriVal='high', selStatusVal='todo';
 function openModal(ei=null){
   editIdx=ei;
   document.getElementById('modal-title').textContent=t(ei!=null?'modalEdit':'modalAdd');
   document.getElementById('modal-confirm').textContent=t(ei!=null?'btnSave':'btnAdd');
   if(ei!=null){
-    const item=getTodos(todayStr())[ei];
+    const item=getTodos(getActiveDate())[ei];
     document.getElementById('m-text').value=item.text;
     document.getElementById('m-due').value=item.due||'';
     document.getElementById('m-memo').value=item.memo||'';
     selPri(item.priority||'med');
+    selStatus(item.status||'todo');
   } else {
     document.getElementById('m-text').value=document.getElementById('quick-input').value||'';
     document.getElementById('m-due').value='';
     document.getElementById('m-memo').value='';
-    selPri('high');
+    selPri('high'); selStatus('todo');
   }
   document.getElementById('modal-bg').classList.add('open');
   setTimeout(()=>document.getElementById('m-text').focus(),80);
@@ -824,13 +896,21 @@ function openModal(ei=null){
 function closeModal(){ document.getElementById('modal-bg').classList.remove('open'); document.getElementById('quick-input').value=''; }
 function selPri(p){
   selPriVal=p;
-  document.querySelectorAll('.pri-pill').forEach(btn=>{ const bp=btn.dataset.p; btn.className='pri-pill'+(bp===p?` sel-${p}`:''); });
+  document.querySelectorAll('#modal-bg .pri-pill').forEach(btn=>{ const bp=btn.dataset.p; btn.className='pri-pill'+(bp===p?` sel-${p}`:''); });
+}
+function selStatus(s){
+  selStatusVal=s;
+  const styleMap={todo:'sel-high',inprogress:'sel-med',review:'sel-med',done:'sel-low'};
+  document.querySelectorAll('#status-pills .pri-pill').forEach(btn=>{
+    const bs=btn.dataset.s;
+    btn.className='pri-pill'+(bs===s?' '+styleMap[s]:'');
+  });
 }
 async function saveTask(){
   const text=document.getElementById('m-text').value.trim(); if(!text) return;
-  const date=todayStr(),list=getTodos(date);
-  const item={text,priority:selPriVal,due:document.getElementById('m-due').value||null,memo:document.getElementById('m-memo').value.trim()||null,done:false,date,created_at:new Date().toISOString()};
-  if(editIdx!=null){ const old=list[editIdx]; item.done=old.done; item.created_at=old.created_at; list[editIdx]=item; }
+  const date=getActiveDate(), list=getTodos(date);
+  const item={text,priority:selPriVal,status:selStatusVal,due:document.getElementById('m-due').value||null,memo:document.getElementById('m-memo').value.trim()||null,done:selStatusVal==='done',date,created_at:new Date().toISOString()};
+  if(editIdx!=null){ const old=list[editIdx]; item.created_at=old.created_at; list[editIdx]=item; }
   else list.push(item);
   saveTodosLocal(date,list); closeModal(); haptic(); renderTodos();
   if(sb) sb.from('todos')[editIdx!=null?'update':'insert'](editIdx!=null?[item]:[item]).then(()=>{});
@@ -838,20 +918,33 @@ async function saveTask(){
 async function quickAdd(){
   const inp=document.getElementById('quick-input');
   if(!inp.value.trim()){ openModal(); return; }
-  const date=todayStr(),list=getTodos(date);
-  const item={text:inp.value.trim(),priority:'med',due:null,memo:null,done:false,date,created_at:new Date().toISOString()};
+  const date=getActiveDate(), list=getTodos(date);
+  const item={text:inp.value.trim(),priority:'med',status:'todo',due:null,memo:null,done:false,date,created_at:new Date().toISOString()};
   list.push(item); saveTodosLocal(date,list); inp.value=''; haptic(); renderTodos();
   if(sb) sb.from('todos').insert([item]);
 }
+async function cycleStatus(i){
+  const date=getActiveDate(), list=getTodos(date);
+  const cycle=['todo','inprogress','review','done'];
+  const cur=list[i].status||'todo';
+  const next=cycle[(cycle.indexOf(cur)+1)%cycle.length];
+  list[i].status=next; list[i].done=next==='done';
+  saveTodosLocal(date,list); haptic(next==='done'?'success':'light');
+  renderTodos();
+  if(next==='done'&&list.filter(x=>x.done).length===list.length){ fireConfetti(); showToast(t('allDone')); }
+  if(sb) sb.from('todos').update({status:next,done:list[i].done}).eq('created_at',list[i].created_at);
+}
 async function toggleTodo(i){
-  const date=todayStr(),list=getTodos(date);
-  list[i].done=!list[i].done; saveTodosLocal(date,list); haptic(list[i].done?'success':'light');
+  const date=getActiveDate(), list=getTodos(date);
+  list[i].done=!list[i].done;
+  list[i].status=list[i].done?'done':'todo';
+  saveTodosLocal(date,list); haptic(list[i].done?'success':'light');
   renderTodos();
   if(list.filter(x=>x.done).length===list.length&&list.length>0){ fireConfetti(); showToast(t('allDone')); }
-  if(sb) sb.from('todos').update({done:list[i].done}).eq('created_at',list[i].created_at);
+  if(sb) sb.from('todos').update({done:list[i].done,status:list[i].status}).eq('created_at',list[i].created_at);
 }
 async function deleteTodo(i){
-  const date=todayStr(),list=getTodos(date),item=list[i];
+  const date=getActiveDate(), list=getTodos(date), item=list[i];
   list.splice(i,1); saveTodosLocal(date,list); haptic(); showToast(t('deleted')); renderTodos();
   if(sb) sb.from('todos').delete().eq('created_at',item.created_at);
 }
@@ -861,15 +954,19 @@ const PRI_ORDER={high:0,med:1,low:2};
 let dragSrc=null;
 
 function renderTodos(){
-  const date=todayStr(), raw=getTodos(date);
+  const date=getActiveDate(), raw=getTodos(date);
   const el=document.getElementById('cards-grid'); el.innerHTML='';
 
-  // Sort: undone by priority asc, then done at bottom
-  const undone=raw.map((item,i)=>({...item,_i:i})).filter(x=>!x.done).sort((a,b)=>(PRI_ORDER[a.priority]??1)-(PRI_ORDER[b.priority]??1));
+  const STATUS_ORDER={inprogress:0,review:1,todo:2,done:3};
+  const undone=raw.map((item,i)=>({...item,_i:i})).filter(x=>!x.done)
+    .sort((a,b)=>{
+      const so=(STATUS_ORDER[a.status||'todo']??2)-(STATUS_ORDER[b.status||'todo']??2);
+      if(so!==0) return so;
+      return (PRI_ORDER[a.priority]??1)-(PRI_ORDER[b.priority]??1);
+    });
   const done=raw.map((item,i)=>({...item,_i:i})).filter(x=>x.done);
   let sorted=[...undone,...done];
 
-  // Apply filter
   if(activeFilter!=='all') sorted=sorted.filter(x=>x.priority===activeFilter||x.done);
 
   if(!sorted.length){
@@ -877,17 +974,22 @@ function renderTodos(){
     updateProgress(raw); return;
   }
 
+  const statusLabel={todo:t('statusTodo'),inprogress:t('statusInProgress'),review:t('statusReview'),done:t('statusDone')};
+  const statusCls={todo:'status-todo',inprogress:'status-inprogress',review:'status-review',done:'status-done'};
+  const cardStatusCls={todo:'status-todo-card',inprogress:'status-inprogress-card',review:'status-review-card',done:'status-done-card'};
+
   sorted.forEach(item=>{
     const i=item._i;
+    const status=item.status||(item.done?'done':'todo');
     const card=document.createElement('div');
-    card.className=`task-card pri-${item.priority||'med'}${item.done?' done':''}`;
+    card.className=`task-card pri-${item.priority||'med'} ${cardStatusCls[status]}${item.done?' done':''}`;
     card.draggable=true; card.dataset.idx=i;
 
     card.addEventListener('dragstart',e=>{ dragSrc=i; card.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
     card.addEventListener('dragend',()=>{ card.classList.remove('dragging'); document.querySelectorAll('.task-card').forEach(c=>c.classList.remove('drag-over')); });
     card.addEventListener('dragover',e=>{ e.preventDefault(); card.classList.add('drag-over'); });
     card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
-    card.addEventListener('drop',e=>{ e.preventDefault(); card.classList.remove('drag-over'); if(dragSrc===null||dragSrc===i) return; const d=todayStr(),l=getTodos(d); const [mv]=l.splice(dragSrc,1); l.splice(i,0,mv); saveTodosLocal(d,l); haptic(); renderTodos(); dragSrc=null; });
+    card.addEventListener('drop',e=>{ e.preventDefault(); card.classList.remove('drag-over'); if(dragSrc===null||dragSrc===i) return; const d=getActiveDate(),l=getTodos(d); const [mv]=l.splice(dragSrc,1); l.splice(i,0,mv); saveTodosLocal(d,l); haptic(); renderTodos(); dragSrc=null; });
 
     const due=dueDateInfo(item.due);
     const priLabel=t('pri'+item.priority.charAt(0).toUpperCase()+item.priority.slice(1));
@@ -904,6 +1006,7 @@ function renderTodos(){
           <div class="card-title">${escHtml(item.text)}</div>
           ${memoHtml}
           <div class="card-footer">
+            <button class="status-btn ${statusCls[status]}" onclick="event.stopPropagation();cycleStatus(${i})">${statusLabel[status]}</button>
             <span class="pri-badge ${item.priority||'med'}">${priLabel}</span>
             ${dueHtml}
           </div>
@@ -920,6 +1023,7 @@ function renderTodos(){
 
 function updateProgress(raw){
   const done=raw.filter(x=>x.done).length, total=raw.length, pct=total?Math.round(done/total*100):0;
+  const inprog=raw.filter(x=>!x.done&&(x.status==='inprogress')).length;
   document.getElementById('prog-text').textContent=`${done} / ${total} ${t('progLabel')}`;
   document.getElementById('prog-pct').textContent=pct+'%';
   document.getElementById('prog-fill').style.width=pct+'%';
@@ -930,14 +1034,14 @@ function updateProgress(raw){
 
 /* ══ AI ══ */
 function renderKPI(){
-  const date=todayStr(), todos=getTodos(date);
+  const date=getActiveDate(), todos=getTodos(date);
   const done=todos.filter(t=>t.done).length, total=todos.length, pct=total?Math.round(done/total*100):0;
-  const highPending=todos.filter(t=>!t.done&&t.priority==='high').length;
-  const overdue=todos.filter(t=>!t.done&&t.due&&t.due<date).length;
+  const inprog=todos.filter(t=>t.status==='inprogress'&&!t.done).length;
+  const review=todos.filter(t=>t.status==='review'&&!t.done).length;
   document.getElementById('kpi-row').innerHTML=[
     {val:done||'—',lbl:lang==='ko'?'완료':'Done'},
-    {val:total?pct+'%':'—',lbl:lang==='ko'?'달성률':'Rate'},
-    {val:overdue||(highPending||'—'),lbl:lang==='ko'?'기한초과/긴급':'Overdue/Urgent'}
+    {val:inprog||'—',lbl:lang==='ko'?'진행중':'In Progress'},
+    {val:review||'—',lbl:lang==='ko'?'검토중':'In Review'}
   ].map(k=>`<div class="kpi"><div class="kpi-val">${k.val}</div><div class="kpi-lbl">${k.lbl}</div></div>`).join('');
 }
 
@@ -1200,7 +1304,7 @@ function renderRoutines(){
 }
 
 function applyRoutinesToday(manual=false){
-  const date=todayStr(), dow=new Date().getDay();
+  const date=getActiveDate(), dow=new Date(date+'T00:00:00').getDay();
   const isWeekday=dow>=1&&dow<=5;
   if(!isWeekday){ if(manual) showToast(lang==='ko'?'오늘은 주말이라 루틴이 적용되지 않아요':'No routines on weekends'); return; }
 
@@ -1240,7 +1344,7 @@ buildPresets();
 setTheme(localStorage.getItem('wl_theme')||'dark');
 const acc=localStorage.getItem('wl_accent'); if(acc) setAccent(acc);
 initDates(); initSupabase();
-applyLang(); renderFilterTabs(); renderTodos();
+applyLang(); renderFilterTabs(); renderTodos(); updateDateNavLabel();
 applyRoutinesToday(false); // auto-apply on load
 const {url,key}=getConfig();
 if(url) document.getElementById('cfg-url').value=url;
