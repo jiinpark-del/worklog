@@ -7,11 +7,11 @@ function showAuthModal(mode){
   const title=document.getElementById('auth-modal-title');
   const btn=document.getElementById('auth-submit-btn');
   if(mode==='signup'){
-    title.textContent='회원가입';
-    btn.textContent='회원가입';
+    title.textContent=t('btnSignup');
+    btn.textContent=t('btnSignup');
   }else{
-    title.textContent='로그인';
-    btn.textContent='로그인';
+    title.textContent=t('btnLogin');
+    btn.textContent=t('btnLogin');
   }
   document.getElementById('auth-email').value='';
   document.getElementById('auth-password').value='';
@@ -34,14 +34,14 @@ async function authSubmit(){
   const errDiv=document.getElementById('auth-error');
 
   if(!email||!password){
-    errDiv.textContent='이메일과 비밀번호를 입력해주세요';
+    errDiv.textContent=t('authEmailPassword');
     errDiv.style.display='block';
     return;
   }
 
   try{
     if(!sb){
-      errDiv.textContent='Supabase 연결이 필요합니다';
+      errDiv.textContent=t('authSupabaseError');
       errDiv.style.display='block';
       return;
     }
@@ -49,7 +49,7 @@ async function authSubmit(){
     if(authMode==='signup'){
       const {data,error}=await sb.auth.signUp({email,password});
       if(error) throw error;
-      errDiv.textContent='회원가입 완료! 이메일을 확인해주세요.';
+      errDiv.textContent=t('authSignupSuccess');
       errDiv.style.color='var(--green)';
       errDiv.style.background='rgba(37,193,122,.15)';
       errDiv.style.borderColor='rgba(37,193,122,.3)';
@@ -60,10 +60,11 @@ async function authSubmit(){
       if(error) throw error;
       closeAuthModal();
       checkAuthStatus();
-      showToast('로그인되었습니다');
+      switchTab('todo',document.querySelector('[data-tab="todo"]'));
+      showToast(t('authLoggedIn'));
     }
   }catch(e){
-    errDiv.textContent='오류: '+(e.message||'알 수 없는 오류');
+    errDiv.textContent=t('authError')+(e.message||t('authUnknownError'));
     errDiv.style.display='block';
   }
 }
@@ -74,7 +75,7 @@ async function logoutUser(){
     await sb.auth.signOut();
     currentUser=null;
     updateAuthUI();
-    showToast('로그아웃되었습니다');
+    showToast(t('authLoggedOut'));
   }catch(e){
     console.warn('Logout error',e);
   }
@@ -108,5 +109,6 @@ function updateAuthUI(){
   }else{
     loggedOut.style.display='block';
     loggedIn.style.display='none';
+    showAuthModal('login');
   }
 }

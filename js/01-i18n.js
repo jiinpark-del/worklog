@@ -30,6 +30,11 @@ const I18N={
     routineApplied:'개 루틴이 오늘 할 일에 추가됐습니다',routineAlready:'오늘 루틴이 이미 적용되어 있습니다',
     todayRoutine:'오늘 적용',daysLabel:'요일',
     weekdaysOnly:'월요일 ~ 금요일 자동 반복',
+    btnLogin:'로그인',btnSignup:'회원가입',
+    authEmailPassword:'이메일과 비밀번호를 입력해주세요',authSupabaseError:'Supabase 연결이 필요합니다',
+    authSignupSuccess:'회원가입 완료! 이메일을 확인해주세요.',authLoggedIn:'로그인되었습니다',
+    authLoggedOut:'로그아웃되었습니다',authError:'오류: ',authUnknownError:'알 수 없는 오류',
+    authToggle:'회원가입',
   },
   en:{
     navTodo:'Today',navAI:'AI Report',navHistory:'History',navSettings:'Settings',navRoutine:'Daily Routine',
@@ -61,6 +66,11 @@ const I18N={
     routineApplied:' routines added to today',routineAlready:"Today's routines already applied",
     todayRoutine:'Today',daysLabel:'days',
     weekdaysOnly:'Repeats Monday – Friday automatically',
+    btnLogin:'Login',btnSignup:'Sign Up',
+    authEmailPassword:'Please enter email and password',authSupabaseError:'Supabase connection required',
+    authSignupSuccess:'Sign up complete! Please check your email.',authLoggedIn:'Logged in',
+    authLoggedOut:'Logged out',authError:'Error: ',authUnknownError:'Unknown error',
+    authToggle:'Sign Up',
   }
 };
 let lang=localStorage.getItem('wl_lang')||'ko';
