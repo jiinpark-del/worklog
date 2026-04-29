@@ -6,12 +6,15 @@ function showAuthModal(mode){
   authMode=mode;
   const title=document.getElementById('auth-modal-title');
   const btn=document.getElementById('auth-submit-btn');
+  const toggleBtn=document.getElementById('auth-toggle-btn');
   if(mode==='signup'){
     title.textContent=t('btnSignup');
     btn.textContent=t('btnSignup');
+    toggleBtn.textContent=lang==='ko'?'이미 계정이 있으신가요? 로그인':'Already have an account? Login';
   }else{
     title.textContent=t('btnLogin');
     btn.textContent=t('btnLogin');
+    toggleBtn.textContent=lang==='ko'?'계정이 없으신가요? 회원가입':'Don\'t have an account? Sign up';
   }
   document.getElementById('auth-email').value='';
   document.getElementById('auth-password').value='';
@@ -110,5 +113,27 @@ function updateAuthUI(){
     loggedOut.style.display='block';
     loggedIn.style.display='none';
     showAuthModal('login');
+  }
+}
+
+async function signInWithGoogle(){
+  if(!sb) return;
+  try{
+    const {data,error}=await sb.auth.signInWithOAuth({provider:'google'});
+    if(error) throw error;
+  }catch(e){
+    document.getElementById('auth-error').textContent='Google 로그인 오류: '+(e.message||'알 수 없는 오류');
+    document.getElementById('auth-error').style.display='block';
+  }
+}
+
+async function signInWithKakao(){
+  if(!sb) return;
+  try{
+    const {data,error}=await sb.auth.signInWithOAuth({provider:'kakao'});
+    if(error) throw error;
+  }catch(e){
+    document.getElementById('auth-error').textContent='Kakao 로그인 오류: '+(e.message||'알 수 없는 오류');
+    document.getElementById('auth-error').style.display='block';
   }
 }

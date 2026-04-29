@@ -73,7 +73,7 @@ const I18N={
     authToggle:'Sign Up',
   }
 };
-let lang=localStorage.getItem('wl_lang')||'ko';
+let lang=localStorage.getItem('wl_lang')||'en';
 const t=k=>I18N[lang][k]||I18N.ko[k]||k;
 function applyLang(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML=t(el.getAttribute('data-i18n')).replace(/\n/g,'<br>'); });
