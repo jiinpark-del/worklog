@@ -98,6 +98,12 @@ async function checkAuthStatus(){
     const {data:{user}}=await sb.auth.getUser();
     if(user){
       currentUser=user;
+      sb.from('profiles').upsert([{
+        id:user.id,
+        email:user.email,
+        full_name:user.user_metadata?.full_name||user.user_metadata?.name||'',
+        avatar_url:user.user_metadata?.avatar_url||user.user_metadata?.picture||''
+      }]);
       updateAuthUI();
       syncFromSupabase();
     }else{

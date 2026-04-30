@@ -55,12 +55,15 @@ async function syncFromSupabase(){
         sb.from('routines').upsert(payload);
       }
     }
-    const {data:profile,error:e4}=await sb.from('profiles').select('name').eq('user_id',currentUser?.id).single();
-    if(!e4&&profile?.name){
-      const profiles=load(KEY_PROFILE)||{};
-      if(!profiles[currentUser.id]) profiles[currentUser.id]={name:'',avatar:''};
-      if(!profiles[currentUser.id].name) profiles[currentUser.id].name=profile.name;
-      ls(KEY_PROFILE,profiles);
+    if(currentUser){
+      const {data:profile,error:e4}=await sb.from('profiles').select('full_name,avatar_url').eq('id',currentUser.id).maybeSingle();
+      if(!e4&&profile){
+        const profiles=load(KEY_PROFILE)||{};
+        if(!profiles[currentUser.id]) profiles[currentUser.id]={name:'',avatar:''};
+        if(profile.full_name&&!profiles[currentUser.id].name) profiles[currentUser.id].name=profile.full_name;
+        if(profile.avatar_url&&!profiles[currentUser.id].avatar) profiles[currentUser.id].avatar=profile.avatar_url;
+        ls(KEY_PROFILE,profiles);
+      }
     }
     renderTodos(); renderFilterTabs(); renderRoutines();
     showToast(lang==='ko'?'☁️ 데이터 동기화 완료':'☁️ Synced from cloud');
