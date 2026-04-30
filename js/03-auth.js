@@ -83,7 +83,9 @@ async function logoutUser(){
   try{
     await sb.auth.signOut();
     currentUser=null;
+    ls(KEY_TODOS,{}); ls(KEY_AI,{}); saveRoutines([]);
     updateAuthUI();
+    renderTodos(); renderRoutines();
     showToast(t('authLoggedOut'));
   }catch(e){
     console.warn('Logout error',e);

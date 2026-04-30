@@ -56,6 +56,7 @@ function saveProfile() {
   const profile = loadProfile();
   profiles[currentUser.id] = { ...profile, name };
   ls(KEY_PROFILE, profiles);
+  if(sb) sb.from('profiles').upsert([{user_id:currentUser.id,name}]);
   showToast(t('saved'));
 }
 

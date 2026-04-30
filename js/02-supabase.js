@@ -48,6 +48,19 @@ async function syncFromSupabase(){
     if(!e3&&routines&&routines.length){
       const mapped=routines.map(r=>({...r,days:[1,2,3,4,5]}));
       saveRoutines(mapped);
+    } else if(!e3&&currentUser){
+      const local=getRoutines();
+      if(local.length){
+        const payload=local.map(r=>({id:r.id,name:r.name,priority:r.priority,memo:r.memo,active:r.active,created:r.created,user_id:currentUser.id}));
+        sb.from('routines').upsert(payload);
+      }
+    }
+    const {data:profile,error:e4}=await sb.from('profiles').select('name').eq('user_id',currentUser?.id).single();
+    if(!e4&&profile?.name){
+      const profiles=load(KEY_PROFILE)||{};
+      if(!profiles[currentUser.id]) profiles[currentUser.id]={name:'',avatar:''};
+      if(!profiles[currentUser.id].name) profiles[currentUser.id].name=profile.name;
+      ls(KEY_PROFILE,profiles);
     }
     renderTodos(); renderFilterTabs(); renderRoutines();
     showToast(lang==='ko'?'☁️ 데이터 동기화 완료':'☁️ Synced from cloud');
