@@ -7,6 +7,12 @@ function showAuthModal(mode){
   const title=document.getElementById('auth-modal-title');
   const btn=document.getElementById('auth-submit-btn');
   const toggleBtn=document.getElementById('auth-toggle-btn');
+  const tabs=document.querySelectorAll('.auth-tab-btn');
+
+  tabs.forEach((tab,i)=>{
+    tab.classList.toggle('active',i===(mode==='signup'?1:0));
+  });
+
   if(mode==='signup'){
     title.textContent=t('btnSignup');
     btn.textContent=t('btnSignup');
@@ -127,13 +133,3 @@ async function signInWithGoogle(){
   }
 }
 
-async function signInWithKakao(){
-  if(!sb) return;
-  try{
-    const {data,error}=await sb.auth.signInWithOAuth({provider:'kakao'});
-    if(error) throw error;
-  }catch(e){
-    document.getElementById('auth-error').textContent='Kakao 로그인 오류: '+(e.message||'알 수 없는 오류');
-    document.getElementById('auth-error').style.display='block';
-  }
-}
