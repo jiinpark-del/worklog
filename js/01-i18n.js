@@ -35,6 +35,8 @@ const I18N={
     authSignupSuccess:'회원가입 완료! 이메일을 확인해주세요.',authLoggedIn:'로그인되었습니다',
     authLoggedOut:'로그아웃되었습니다',authError:'오류: ',authUnknownError:'알 수 없는 오류',
     authToggle:'회원가입',
+    profileTitle:'프로필',uploadAvatar:'프로필 사진',userName:'이름',saveProfile:'저장',
+    reminder:'마감일 리마인더',reminderLabel:'마감일에 알림 받기',
   },
   en:{
     navTodo:'Today',navAI:'AI Report',navHistory:'History',navSettings:'Settings',navRoutine:'Daily Routine',
@@ -71,6 +73,8 @@ const I18N={
     authSignupSuccess:'Sign up complete! Please check your email.',authLoggedIn:'Logged in',
     authLoggedOut:'Logged out',authError:'Error: ',authUnknownError:'Unknown error',
     authToggle:'Sign Up',
+    profileTitle:'Profile',uploadAvatar:'Profile Picture',userName:'Name',saveProfile:'Save',
+    reminder:'Due Date Reminder',reminderLabel:'Get notified on due date',
   }
 };
 let lang=localStorage.getItem('wl_lang')||'en';

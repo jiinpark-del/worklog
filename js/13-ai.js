@@ -20,16 +20,10 @@ async function generateReport(){
   const prompt=isKo
     ?`오늘(${date}) 업무 현황:\n\n완료 (${done.length}개):\n${done.map(line).join('\n')||'없음'}\n\n미완료 (${undone.length}개):\n${undone.map(line).join('\n')||'없음'}\n\n한국어로 간결한 일일 업무 리포트를 작성해주세요.\n구성: ✅ 잘한 점 / ⚠️ 미완료 / 🎯 내일 우선순위 3가지\n각 섹션 2~3줄.`
     :`Today's summary (${date}):\n\nDone (${done.length}):\n${done.map(line).join('\n')||'None'}\n\nPending (${undone.length}):\n${undone.map(line).join('\n')||'None'}\n\nWrite a concise daily report in English.\nFormat: ✅ Highlights / ⚠️ Incomplete / 🎯 Top 3 for tomorrow\n2-3 lines per section.`;
-  const edgeUrl=localStorage.getItem('wl_edge_url')||'';
   const btn=document.getElementById('ai-btn'), res=document.getElementById('ai-result');
-  if(!edgeUrl){
-    res.className='ai-result';
-    res.textContent=lang==='ko'?'설정 탭에서 Edge Function URL을 먼저 입력해주세요':'Please enter your Edge Function URL in Settings first';
-    return;
-  }
   btn.disabled=true; res.className='ai-result loading'; res.textContent=t('aiLoading');
   try{
-    const r=await fetch(edgeUrl,{
+    const r=await fetch(EDGE_FUNCTION_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({prompt})

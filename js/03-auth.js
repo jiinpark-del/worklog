@@ -116,10 +116,12 @@ function updateAuthUI(){
     loggedIn.style.display='block';
     closeAuthModal();
     document.getElementById('user-email').textContent=currentUser.email;
+    updateProfileUI();
   }else{
     loggedOut.style.display='block';
     loggedIn.style.display='none';
     showAuthModal('login');
+    updateProfileUI();
   }
 }
 

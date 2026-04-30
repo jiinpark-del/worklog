@@ -1,6 +1,7 @@
 /* ══ Supabase ══ */
 const SUPABASE_URL = 'https://lmgeckzwefrxovowwkxj.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtZ2Vja3p3ZWZyeG92b3d3a3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NjgzOTQsImV4cCI6MjA5MjU0NDM5NH0.DIO1K4U6TCapXSorEiUnKonpemvdGG0U-mmH4lPNLp4';
+const EDGE_FUNCTION_URL = 'https://lmgeckzwefrxovowwkxj.supabase.co/functions/v1/ai-report';
 
 const SB_URL_KEY='wl_sb_url',SB_KEY_KEY='wl_sb_key';
 let sb=null;
