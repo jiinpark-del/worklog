@@ -114,6 +114,7 @@ function updateAuthUI(){
   if(currentUser){
     loggedOut.style.display='none';
     loggedIn.style.display='block';
+    closeAuthModal();
     document.getElementById('user-email').textContent=currentUser.email;
   }else{
     loggedOut.style.display='block';
