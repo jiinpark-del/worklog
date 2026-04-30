@@ -32,11 +32,12 @@ function openDatePicker(){
 
 function setActiveDate(val){ if(!val) return; activeDate=val; updateDateNavLabel(); renderTodos(); }
 function jumpToToday(){ activeDate=todayStr(); updateDateNavLabel(); renderTodos(); }
-function initDates(){
+function updateSidebarDate(){
   const now=new Date();
   const sdEl=document.getElementById('sidebar-date');
   if(sdEl) sdEl.textContent=now.toLocaleDateString(lang==='ko'?'ko-KR':'en-AU',{month:'long',day:'numeric',weekday:'short'});
 }
+function initDates(){ updateSidebarDate(); }
 
 /* ══ Due date label ══ */
 function dueDateInfo(due){

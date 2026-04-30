@@ -50,11 +50,11 @@ function quickRoutine(){
 
 function toggleRoutineActive(i){
   const list=getRoutines(); list[i].active=!list[i].active; saveRoutines(list); haptic(); renderRoutines();
-  if(sb) sb.from('routines').update({active:list[i].active}).eq('id',list[i].id);
+  if(sb && currentUser) sb.from('routines').update({active:list[i].active}).eq('id',list[i].id).eq('user_id',currentUser.id);
 }
 function deleteRoutine(i){
   const list=getRoutines(); const item=list[i]; list.splice(i,1); saveRoutines(list); haptic(); renderRoutines(); showToast(t('deleted'));
-  if(sb) sb.from('routines').delete().eq('id',item.id);
+  if(sb && currentUser) sb.from('routines').delete().eq('id',item.id).eq('user_id',currentUser.id);
 }
 
 function renderRoutines(){

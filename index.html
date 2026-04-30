@@ -237,17 +237,17 @@
       <p class="sec-label" data-i18n="secSettings">설정</p>
       <!-- AUTH SECTION -->
       <div class="settings-block" id="auth-block">
-        <p class="settings-block-title">계정</p>
+        <p class="settings-block-title" data-i18n="accountTitle">계정</p>
         <div id="auth-logged-out" style="display:none">
-          <button class="btn-confirm" onclick="showAuthModal('login')" style="width:100%">로그인</button>
-          <button class="ghost-btn" onclick="showAuthModal('signup')" style="width:100%;margin-top:8px">회원가입</button>
+          <button class="btn-confirm" onclick="showAuthModal('login')" style="width:100%" data-i18n="btnLogin">로그인</button>
+          <button class="ghost-btn" onclick="showAuthModal('signup')" style="width:100%;margin-top:8px" data-i18n="btnSignup">회원가입</button>
         </div>
         <div id="auth-logged-in" style="display:none">
           <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-            <p style="font-size:12px;color:var(--text2);margin-bottom:4px">로그인 이메일</p>
+            <p style="font-size:12px;color:var(--text2);margin-bottom:4px" data-i18n="loginEmail">로그인 이메일</p>
             <p style="font-size:13px;font-family:var(--font-mono)" id="user-email">—</p>
           </div>
-          <button class="ghost-btn" onclick="logoutUser()" style="width:100%;color:var(--red)">로그아웃</button>
+          <button class="ghost-btn" onclick="logoutUser()" style="width:100%;color:var(--red)" data-i18n="btnLogout">로그아웃</button>
         </div>
       </div>
       <div class="settings-block" id="profile-block" style="display:none">
@@ -284,15 +284,15 @@
     <!-- 왼쪽: 브랜딩 -->
     <div class="auth-brand">
       <p class="auth-logo">WORKLOG</p>
-      <h2 class="auth-title">Your daily<br>work companion</h2>
+      <h2 class="auth-title" data-i18n="authTagline">Your daily<br>work companion</h2>
       <div class="auth-brand-tabs">
-        <button class="auth-tab-btn active" onclick="showAuthModal('login')">Login</button>
-        <button class="auth-tab-btn" onclick="showAuthModal('signup')">Sign Up</button>
+        <button class="auth-tab-btn active" onclick="showAuthModal('login')" data-i18n="authLogin">Login</button>
+        <button class="auth-tab-btn" onclick="showAuthModal('signup')" data-i18n="authSignup">Sign Up</button>
       </div>
       <ul class="auth-features">
-        <li>· Track tasks</li>
-        <li>· AI reports</li>
-        <li>· Daily routines</li>
+        <li><span data-i18n="authFeature1">· Track tasks</span></li>
+        <li><span data-i18n="authFeature2">· AI reports</span></li>
+        <li><span data-i18n="authFeature3">· Daily routines</span></li>
       </ul>
     </div>
     <!-- 오른쪽: 폼 -->
@@ -311,11 +311,11 @@
       </div>
 
       <div style="margin-bottom:16px">
-        <label style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase">Email</label>
+        <label style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase" data-i18n="fieldEmail">Email</label>
         <input type="email" id="auth-email" placeholder="you@example.com" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;color:var(--text);font-family:var(--font-sans);font-size:14px;outline:none;transition:border .15s;box-sizing:border-box">
       </div>
       <div style="margin-bottom:20px">
-        <label style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase">Password</label>
+        <label style="display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase" data-i18n="fieldPassword">Password</label>
         <input type="password" id="auth-password" placeholder="••••••••" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;color:var(--text);font-family:var(--font-sans);font-size:14px;outline:none;transition:border .15s;box-sizing:border-box">
       </div>
 

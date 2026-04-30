@@ -37,6 +37,11 @@ const I18N={
     authToggle:'회원가입',
     profileTitle:'프로필',uploadAvatar:'프로필 사진',userName:'이름',saveProfile:'저장',
     reminder:'마감일 리마인더',reminderLabel:'마감일에 알림 받기',
+    accountTitle:'계정',loginEmail:'로그인 이메일',btnLogout:'로그아웃',
+    fieldEmail:'이메일',fieldPassword:'비밀번호',
+    authLogin:'로그인',authSignup:'회원가입',
+    authTagline:'일상 업무 관리 도우미',
+    authFeature1:'업무 추적',authFeature2:'AI 리포트',authFeature3:'데일리 루틴',
   },
   en:{
     navTodo:'Today',navAI:'AI Report',navHistory:'History',navSettings:'Settings',navRoutine:'Daily Routine',
@@ -75,6 +80,11 @@ const I18N={
     authToggle:'Sign Up',
     profileTitle:'Profile',uploadAvatar:'Profile Picture',userName:'Name',saveProfile:'Save',
     reminder:'Due Date Reminder',reminderLabel:'Get notified on due date',
+    accountTitle:'Account',loginEmail:'Login Email',btnLogout:'Logout',
+    fieldEmail:'Email',fieldPassword:'Password',
+    authLogin:'Login',authSignup:'Sign Up',
+    authTagline:'Your daily work companion',
+    authFeature1:'Track tasks',authFeature2:'AI reports',authFeature3:'Daily routines',
   }
 };
 let lang=localStorage.getItem('wl_lang')||'en';
@@ -84,6 +94,6 @@ function applyLang(){
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
   document.getElementById('btn-lang').textContent=lang==='ko'?'EN':'KO';
   document.documentElement.lang=lang;
-  renderFilterTabs(); renderTodos();
+  updateSidebarDate(); renderFilterTabs(); renderTodos();
 }
 function toggleLang(){ lang=lang==='ko'?'en':'ko'; localStorage.setItem('wl_lang',lang); applyLang(); }

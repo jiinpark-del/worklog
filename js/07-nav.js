@@ -15,8 +15,6 @@ function switchTab(tab,btn){
     const {url,key}=getConfig();
     document.getElementById('cfg-url').value=url;
     document.getElementById('cfg-key').value=key;
-    const eu=localStorage.getItem('wl_edge_url')||'';
-    if(eu) document.getElementById('cfg-edge').value=eu;
     setSS(sb?'online':'offline');
   }
 }

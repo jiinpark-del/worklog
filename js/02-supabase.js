@@ -57,12 +57,6 @@ function setSS(s){
   ['sync-dot','sync-dot2'].forEach(id=>{ const d=document.getElementById(id); if(d) d.className='sync-dot'+(s==='syncing'?' syncing':s==='online'?'':' offline'); });
   const cl=document.getElementById('conn-label'); if(cl) cl.textContent=t(s==='online'?'connected':s==='syncing'?'checking':'disconnected');
 }
-function saveEdgeUrl(){
-  const url=document.getElementById('cfg-edge').value.trim();
-  if(!url) return;
-  localStorage.setItem('wl_edge_url',url);
-  showToast(t('saved'));
-}
 function saveConfig(){
   const url=document.getElementById('cfg-url').value.trim(),key=document.getElementById('cfg-key').value.trim();
   if(!url||!key) return;
