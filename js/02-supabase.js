@@ -12,7 +12,7 @@ function getConfig(){
 }
 function initSupabase(){
   const {url,key}=getConfig();
-  if(url&&key&&url!=='https://lmgeckzwefrxovowwkxj.supabase.co'){
+  if(url&&key){
     try{
       sb=supabase.createClient(url,key);
       setSS('syncing');
