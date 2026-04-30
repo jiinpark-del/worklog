@@ -36,7 +36,7 @@ function saveRoutine(){
   const item={id:rEditIdx!=null?list[rEditIdx].id:Date.now().toString(),name,priority:selRPriVal,days:WEEKDAYS,memo:document.getElementById('r-memo').value.trim()||null,active:true,created:new Date().toISOString()};
   if(rEditIdx!=null) list[rEditIdx]=item; else list.push(item);
   saveRoutines(list); closeRModal(); haptic(); renderRoutines(); showToast(t('saved'));
-  if(sb && currentUser) sb.from('routines').upsert([{id:item.id,name:item.name,priority:item.priority,memo:item.memo,active:item.active,created:item.created,user_id:currentUser.id}]);
+  if(sb && currentUser) sb.from('routines').upsert([{id:item.id,name:item.name,priority:item.priority,memo:item.memo,active:item.active,created:item.created,user_id:currentUser.id}]).then(({error})=>{ if(error) console.error('[routine upsert]',error); });
 }
 
 function quickRoutine(){
@@ -45,7 +45,7 @@ function quickRoutine(){
   const list=getRoutines();
   const item={id:Date.now().toString(),name:inp.value.trim(),priority:'med',days:WEEKDAYS,memo:null,active:true,created:new Date().toISOString()};
   list.push(item); saveRoutines(list); inp.value=''; haptic(); renderRoutines(); showToast(t('saved'));
-  if(sb && currentUser) sb.from('routines').upsert([{id:item.id,name:item.name,priority:item.priority,memo:item.memo,active:item.active,created:item.created,user_id:currentUser.id}]);
+  if(sb && currentUser) sb.from('routines').upsert([{id:item.id,name:item.name,priority:item.priority,memo:item.memo,active:item.active,created:item.created,user_id:currentUser.id}]).then(({error})=>{ if(error) console.error('[routine upsert]',error); });
 }
 
 function toggleRoutineActive(i){
