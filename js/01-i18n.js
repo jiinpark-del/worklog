@@ -92,7 +92,9 @@ const t=k=>I18N[lang][k]||I18N.ko[k]||k;
 function applyLang(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML=t(el.getAttribute('data-i18n')).replace(/\n/g,'<br>'); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
-  document.getElementById('btn-lang').textContent=lang==='ko'?'EN':'KO';
+  const langLabel=lang==='ko'?'EN':'KO';
+  document.getElementById('btn-lang').textContent=langLabel;
+  const authLangBtn=document.getElementById('auth-lang-btn'); if(authLangBtn) authLangBtn.textContent=langLabel;
   document.documentElement.lang=lang;
   updateSidebarDate(); renderFilterTabs(); renderTodos();
 }
