@@ -26,8 +26,8 @@ function renderProfile() {
   }
 }
 
-function handleAvatarUpload(file) {
-  if (!file) return;
+async function handleAvatarUpload(file) {
+  if (!file || !currentUser) return;
   if (!file.type.startsWith('image/')) {
     showToast(lang === 'ko' ? '이미지 파일을 선택해주세요' : 'Please select an image file');
     return;
@@ -37,16 +37,31 @@ function handleAvatarUpload(file) {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const base64 = e.target.result;
+  if (sb) {
+    showToast(lang === 'ko' ? '업로드 중...' : 'Uploading...');
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `${currentUser.id}/avatar.${ext}`;
+    const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
+    if (error) { showToast(lang === 'ko' ? '업로드 실패: ' + error.message : 'Upload failed: ' + error.message); return; }
+    const { data: urlData } = sb.storage.from('avatars').getPublicUrl(path);
+    const url = urlData.publicUrl;
     const profiles = load(KEY_PROFILE) || {};
-    profiles[currentUser.id] = { ...loadProfile(), avatar: base64 };
+    profiles[currentUser.id] = { ...loadProfile(), avatar: url };
     ls(KEY_PROFILE, profiles);
+    sb.from('profiles').upsert([{ id: currentUser.id, avatar_url: url }]);
     renderProfile();
     showToast(t('saved'));
-  };
-  reader.readAsDataURL(file);
+  } else {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const profiles = load(KEY_PROFILE) || {};
+      profiles[currentUser.id] = { ...loadProfile(), avatar: e.target.result };
+      ls(KEY_PROFILE, profiles);
+      renderProfile();
+      showToast(t('saved'));
+    };
+    reader.readAsDataURL(file);
+  }
 }
 
 function saveProfile() {
