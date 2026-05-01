@@ -108,6 +108,6 @@ function applyLang(){
   if(authTitle) authTitle.textContent=t(typeof authMode!=='undefined'&&authMode==='signup'?'btnSignup':'btnLogin');
   const authSubmitBtn=document.getElementById('auth-submit-btn');
   if(authSubmitBtn) authSubmitBtn.textContent=t(typeof authMode!=='undefined'&&authMode==='signup'?'btnSignup':'btnLogin');
-  updateSidebarDate(); renderFilterTabs(); renderTodos();
+  updateSidebarDate(); renderFilterTabs(); renderTodos(); renderKPI();
 }
 function toggleLang(){ lang=lang==='ko'?'en':'ko'; localStorage.setItem('wl_lang',lang); applyLang(); }
