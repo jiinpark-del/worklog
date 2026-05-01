@@ -16,11 +16,11 @@ function showAuthModal(mode){
   if(mode==='signup'){
     title.textContent=t('btnSignup');
     btn.textContent=t('btnSignup');
-    toggleBtn.textContent=lang==='ko'?'이미 계정이 있으신가요? 로그인':'Already have an account? Login';
+    toggleBtn.textContent=t('authToggleToLogin');
   }else{
     title.textContent=t('btnLogin');
     btn.textContent=t('btnLogin');
-    toggleBtn.textContent=lang==='ko'?'계정이 없으신가요? 회원가입':'Don\'t have an account? Sign up';
+    toggleBtn.textContent=t('authToggleToSignup');
   }
   document.getElementById('auth-email').value='';
   document.getElementById('auth-password').value='';
@@ -103,7 +103,7 @@ async function checkAuthStatus(){
         email:user.email,
         full_name:user.user_metadata?.full_name||user.user_metadata?.name||'',
         avatar_url:user.user_metadata?.avatar_url||user.user_metadata?.picture||''
-      }]).then(({error})=>{ if(error) console.error('[profile upsert]',error); });
+      }]);
       updateAuthUI();
       syncFromSupabase();
     }else{
