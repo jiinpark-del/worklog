@@ -16,13 +16,16 @@ function renderProfile() {
 
   if (nameInput) nameInput.value = profile.name || '';
 
+  const deleteBtn = document.getElementById('delete-avatar-btn');
   if (profile.avatar) {
     avatarImg.src = profile.avatar;
     avatarImg.style.display = 'block';
     avatarEmpty.style.display = 'none';
+    if (deleteBtn) deleteBtn.style.display = 'block';
   } else {
     avatarImg.style.display = 'none';
     avatarEmpty.style.display = 'flex';
+    if (deleteBtn) deleteBtn.style.display = 'none';
   }
 }
 
@@ -62,6 +65,24 @@ async function handleAvatarUpload(file) {
     };
     reader.readAsDataURL(file);
   }
+}
+
+async function deleteAvatar() {
+  if (!currentUser) return;
+  if (sb) {
+    const profile = loadProfile();
+    if (profile?.avatar) {
+      const url = profile.avatar;
+      const parts = url.split('/avatars/');
+      if (parts[1]) await sb.storage.from('avatars').remove([decodeURIComponent(parts[1])]);
+    }
+    sb.from('profiles').upsert([{ id: currentUser.id, avatar_url: null }]);
+  }
+  const profiles = load(KEY_PROFILE) || {};
+  if (profiles[currentUser.id]) profiles[currentUser.id].avatar = '';
+  ls(KEY_PROFILE, profiles);
+  renderProfile();
+  showToast(t('deleted'));
 }
 
 function saveProfile() {

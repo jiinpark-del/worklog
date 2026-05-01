@@ -259,6 +259,7 @@
           </div>
           <input type="file" id="profile-avatar-input" accept="image/*" onchange="handleAvatarUpload(this.files[0])" style="display:none"/>
           <button class="btn-confirm" onclick="document.getElementById('profile-avatar-input').click()" style="width:100%;font-size:13px" data-i18n="uploadAvatar">프로필 사진</button>
+          <button class="ghost-btn" id="delete-avatar-btn" onclick="deleteAvatar()" style="width:100%;margin-top:6px;color:var(--red);display:none" data-i18n="deleteAvatar">사진 삭제</button>
         </div>
         <div class="sf">
           <label data-i18n="userName">이름</label>
