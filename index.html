@@ -186,6 +186,31 @@
     <div id="panel-ai" class="panel">
       <p class="sec-label" data-i18n="secAI">AI 리포트</p>
       <div class="kpi-row" id="kpi-row"></div>
+      <!-- Period selector -->
+      <div class="ai-selector-group" id="ai-period-group">
+        <button class="ai-sel-pill active" data-period="today"  onclick="setAIPeriod('today')"  data-i18n="aiPeriodToday"></button>
+        <button class="ai-sel-pill"        data-period="week"   onclick="setAIPeriod('week')"   data-i18n="aiPeriodWeek"></button>
+        <button class="ai-sel-pill"        data-period="month"  onclick="setAIPeriod('month')"  data-i18n="aiPeriodMonth"></button>
+        <button class="ai-sel-pill"        data-period="custom" onclick="setAIPeriod('custom')" data-i18n="aiPeriodCustom"></button>
+      </div>
+      <!-- Custom date range -->
+      <div class="ai-custom-range" id="ai-custom-range" style="display:none">
+        <div class="ai-date-field">
+          <label class="ai-range-label" data-i18n="aiDateFrom"></label>
+          <input type="date" id="ai-date-from" class="form-input" oninput="onCustomRangeChange()"/>
+        </div>
+        <div class="ai-date-field">
+          <label class="ai-range-label" data-i18n="aiDateTo"></label>
+          <input type="date" id="ai-date-to" class="form-input" oninput="onCustomRangeChange()"/>
+        </div>
+      </div>
+      <!-- Style selector -->
+      <div class="ai-selector-group" id="ai-style-group">
+        <button class="ai-sel-pill active" data-style="daily"    onclick="setAIStyle('daily')"    data-i18n="aiStyleDaily"></button>
+        <button class="ai-sel-pill"        data-style="resume"   onclick="setAIStyle('resume')"   data-i18n="aiStyleResume"></button>
+        <button class="ai-sel-pill"        data-style="business" onclick="setAIStyle('business')" data-i18n="aiStyleBusiness"></button>
+        <button class="ai-sel-pill"        data-style="linkedin" onclick="setAIStyle('linkedin')" data-i18n="aiStyleLinkedIn"></button>
+      </div>
       <button class="ai-gen-btn" id="ai-btn" onclick="generateReport()">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         <span data-i18n="btnGenReport">AI 리포트 생성</span>
