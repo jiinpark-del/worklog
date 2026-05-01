@@ -96,6 +96,12 @@ function applyLang(){
   document.getElementById('btn-lang').textContent=langLabel;
   const authLangBtn=document.getElementById('auth-lang-btn'); if(authLangBtn) authLangBtn.textContent=langLabel;
   document.documentElement.lang=lang;
+  const toggleBtn=document.getElementById('auth-toggle-btn');
+  if(toggleBtn) toggleBtn.textContent=t(typeof authMode!=='undefined'&&authMode==='signup'?'authToggleToLogin':'authToggleToSignup');
+  const authTitle=document.getElementById('auth-modal-title');
+  if(authTitle) authTitle.textContent=t(typeof authMode!=='undefined'&&authMode==='signup'?'btnSignup':'btnLogin');
+  const authSubmitBtn=document.getElementById('auth-submit-btn');
+  if(authSubmitBtn) authSubmitBtn.textContent=t(typeof authMode!=='undefined'&&authMode==='signup'?'btnSignup':'btnLogin');
   updateSidebarDate(); renderFilterTabs(); renderTodos();
 }
 function toggleLang(){ lang=lang==='ko'?'en':'ko'; localStorage.setItem('wl_lang',lang); applyLang(); }
